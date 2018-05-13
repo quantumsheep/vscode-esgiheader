@@ -110,7 +110,7 @@ export const getHeader = (fileContent: string) => {
     const match = fileContent.match(/^(.{111}\r\n){10}/g);
 
     return match ? match[0] : null;
-}
+};
 
 export const getFieldValue = (header: string, fieldname: string) => {
     const match = template.match(new RegExp(`^((?:.*\\\n)*.*)(\\\$${fieldname}_*)`));
@@ -119,7 +119,7 @@ export const getFieldValue = (header: string, fieldname: string) => {
     const test = match ? header.substr(match[1].length + linejump, match[2].length) : '';
 
     return match ? header.substr(match[1].length + linejump, match[2].length) : '';
-}
+};
 
 export const getHeaderData = (header: string): HeaderData => ({
     filename: getFieldValue(header, 'FILENAME'),
@@ -144,7 +144,7 @@ export const generateHeaderData = (document: vscode.TextDocument, headerData?: H
         createdAt: headerData ? headerData.createdAt : moment(),
         createdBy: user
     }
-}
+};
 
 export const setFieldValue = (header: string, name: string, value: string) => {
     const match = template.match(new RegExp(`^((?:.*\\n)*.*)(\\\$${name}_*)`, ''));
@@ -152,7 +152,7 @@ export const setFieldValue = (header: string, name: string, value: string) => {
     return match ? header.substr(0, match[1].length)
         .concat(value.concat(' '.repeat(match[2].length)).substr(0, match[2].length))
         .concat(header.substr(match[1].length + match[2].length)) : "";
-}
+};
 
 export const getTemplate = (languageId: string) => template.replace(new RegExp(`^(.{${commentTypes[languageId][0].length}})(.*)(.{${commentTypes[languageId][0].length}})$`, 'gm'), commentTypes[languageId][0] + '$2' + commentTypes[languageId][1]);
 
@@ -193,4 +193,4 @@ export const activate = (context: vscode.ExtensionContext) => {
     });
 
     context.subscriptions.push(disposable);
-}
+};
