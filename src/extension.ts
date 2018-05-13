@@ -115,10 +115,7 @@ export const getHeader = (fileContent: string) => {
 export const getFieldValue = (header: string, fieldname: string) => {
     const match = template.match(new RegExp(`^((?:.*\\\n)*.*)(\\\$${fieldname}_*)`));
 
-    const linejump = match ? match[1].split('\n').length - 1 : 0;
-    const test = match ? header.substr(match[1].length + linejump, match[2].length) : '';
-
-    return match ? header.substr(match[1].length + linejump, match[2].length) : '';
+    return match ? header.substr(match[1].length, match[2].length) : '';
 };
 
 export const getHeaderData = (header: string): HeaderData => ({
