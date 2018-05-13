@@ -1,0 +1,72 @@
+{
+    "name": "esgiheader",
+    "displayName": "ESGI Header",
+    "description": "ESGI header for VSCode : www.esgi.fr",
+    "version": "1.0.1",
+    "publisher": "QuantumSheep",
+    "icon": "esgi.png",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/QuantumSheep/vscode-esgiheader"
+    },
+    "bugs": {
+        "url": "https://github.com/QuantumSheep/vscode-esgiheader/issues"
+    },
+    "homepage": "https://github.com/QuantumSheep/vscode-esgiheader",
+    "engines": {
+        "vscode": "^1.23.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "*"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "configuration": {
+            "properties": {
+                "esgiheader.username": {
+                    "type": "string",
+                    "description": "Username to use in ESGI headers"
+                },
+                "esgiheader.email": {
+                    "type": "string",
+                    "description": "Email address to use in ESGI headers"
+                }
+            }
+        },
+        "commands": [
+            {
+                "command": "esgiheader.insert",
+                "title": "Insert ESGI header",
+                "when": "editorTextFocus"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "esgiheader.insert",
+                "key": "ctrl+alt+h",
+                "mac": "cmd+alt+h",
+                "when": "editorTextFocus"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.6",
+        "tslint": "^5.8.0",
+        "@types/node": "^7.0.43",
+        "@types/mocha": "^2.2.42"
+    },
+    "dependencies": {
+        "moment": "^2.22.1"
+    }
+}
