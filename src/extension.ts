@@ -107,7 +107,7 @@ export const commentTypes: { [lang: string]: string[] } = {
 export const isSupported = (language: string) => language in commentTypes;
 
 export const getHeader = (fileContent: string) => {
-    const match = fileContent.match(/^(.{111}\r\n){10}/g);
+    const match = fileContent.match(/^(.{111}((\r\n)|(\n))){10}/g);
 
     return match ? match[0] : null;
 };
@@ -172,6 +172,7 @@ export const activate = (context: vscode.ExtensionContext) => {
                 vscode.window.activeTextEditor.edit(editor => {
                     if (vscode.window.activeTextEditor) {
                         const current = getHeader(vscode.window.activeTextEditor.document.getText());
+                        console.log(vscode.window.activeTextEditor.document.eol);
 
                         if (current) {
                             editor.replace(
