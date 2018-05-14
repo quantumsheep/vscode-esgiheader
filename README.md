@@ -26,14 +26,14 @@ Press `F1` and type `ext install esgiheader`.
 Go to extensions tab and search for `esgiheader`
 
 # Usage
- - **macOS** : <kbd>⌘</kbd> + <kbd>⌥</kbd> + <kbd>H</kbd>
- - **Linux** / **Windows** : <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>H</kbd>
+ - **macOS**: <kbd>⌘</kbd> + <kbd>⌥</kbd> + <kbd>H</kbd>
+ - **Linux** / **Windows**: <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>H</kbd>
 
 Every time the hotkeys are pushed the updated time and updated username will be updated automatically.
 
 ## Configuration
 
-To define your header's username and email, you need to go to your [User Settings](https://code.visualstudio.com/docs/getstarted/settings) and change those values :
+To define your header's username and email, you need to go to your [User Settings](https://code.visualstudio.com/docs/getstarted/settings) and change those values:
 
 ```json
 {
