@@ -44,7 +44,7 @@ To define your header's username and email, you need to go to your [User Setting
 
 # Informations
 ## ASCII font used
-Aligator
+Alligator
 
 ## License
 MIT
