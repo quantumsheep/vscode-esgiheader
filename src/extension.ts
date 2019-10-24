@@ -102,6 +102,24 @@ export const commentTypes: { [lang: string]: string[] } = {
   'yaml': hashes
 }
 
+enum EOL {
+  LF,
+  CR,
+  CRLF,
+}
+
+export function getLineBreakType(str: string): EOL {
+  const indexOfLF = str.indexOf('\n', 1)  // No need to check first-character
+
+  if (indexOfLF === -1) {
+    return (str.indexOf('\r') !== -1) ? EOL.CR : EOL.LF
+  }
+
+  if (str[indexOfLF - 1] === '\r') return EOL.CRLF
+
+  return EOL.LF
+}
+
 export const isSupported = (language: string) => language in commentTypes
 
 export function getHeader(fileContent: string): string {
@@ -113,7 +131,9 @@ export function getHeader(fileContent: string): string {
 export function getFieldValue(header: string, fieldname: string): string {
   const match = template.match(new RegExp(`^((?:.*\\\n)*.*)(\\\$${fieldname}_*)`))
 
-  return match ? header.substr(match[1].length + match[1].split('\n').length - 1, match[2].length) : ''
+  const offset = getLineBreakType(template) == EOL.CRLF ? match[1].split('\n').length - 1 : 0
+
+  return match ? header.substr(match[1].length + offset, match[2].length) : ''
 }
 
 export const getHeaderData = (header: string): HeaderData => ({
