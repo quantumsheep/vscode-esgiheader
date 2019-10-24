@@ -8,5 +8,5 @@
     },
     "typescript.tsdk": "./node_modules/typescript/lib", // this is to define our typescript version to not conflict with global's version,
     "editor.detectIndentation": false,
-    "editor.inden": 2,
+    "editor.tabSize": 2,
 }
