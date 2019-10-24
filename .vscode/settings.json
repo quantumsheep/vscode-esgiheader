@@ -6,5 +6,7 @@
     "search.exclude": {
         "out": true // set this to false to include "out" folder in search results
     },
-    "typescript.tsdk": "./node_modules/typescript/lib" // this is to define our typescript version to not conflict with global's version
+    "typescript.tsdk": "./node_modules/typescript/lib", // this is to define our typescript version to not conflict with global's version,
+    "editor.detectIndentation": false,
+    "editor.inden": 2,
 }

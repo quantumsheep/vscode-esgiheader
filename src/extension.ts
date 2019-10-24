@@ -1,6 +1,6 @@
 //           __  _
-//       .-.'  `; `-._  __  _
-//      (_,         .-:'  `; `-._
+//       .-.'  ` `-._  __  _
+//      (_,         .-:'  ` `-._
 //    ,'o"(    Q   (_,           )
 //   (__,-'      ,'o"(     S      )>
 //      (       (__,-'            )
@@ -8,38 +8,36 @@
 //          |||  |||`-'._.--._.-'
 //                     |||  |||
 
-'use strict';
-
-import * as vscode from 'vscode';
-import * as moment from 'moment';
-import { basename } from 'path';
+import * as vscode from 'vscode'
+import * as moment from 'moment'
+import { basename } from 'path'
 
 export type HeaderData = {
-    filename: string;
-    author: string;
-    createdBy: string;
-    createdAt: moment.Moment;
-    updatedBy: string;
-    updatedAt: moment.Moment;
-};
+  filename: string
+  author: string
+  createdBy: string
+  createdAt: moment.Moment
+  updatedBy: string
+  updatedAt: moment.Moment
+}
 
 declare global {
-    interface String {
-        repeat(count: number): string;
-    }
+  interface String {
+    repeat(count: number): string
+  }
 }
 
 String.prototype.repeat = function (count: number) {
-    if (count < 1) return '';
+  if (count < 1) return ''
 
-    let pattern = this;
-    let result = '';
+  let pattern = this
+  let result = ''
 
-    while (count > 1) {
-        if (count & 1) result += pattern;
-        count >>= 1, pattern += pattern;
-    }
-    return result + pattern;
+  while (count > 1) {
+    if (count & 1) result += pattern
+    count >>= 1, pattern += pattern
+  }
+  return result + pattern
 }
 
 export const template = `
@@ -55,140 +53,140 @@ export const template = `
 *                                                                                                             *
 ***************************************************************************************************************
 
-`.substring(1);
+`.substring(1)
 
-const hashes = ['# ', ' #'];
-const slashes = ['/* ', ' */'];
-const semicolons = [';; ', ' ;;'];
-const parens = ['(* ', ' *)'];
-const dashes = ['-- ', ' --'];
-const percents = ['%% ', ' %%'];
+const hashes = ['# ', ' #']
+const slashes = ['/* ', ' */']
+const semicolons = [' ', ' ']
+const parens = ['(* ', ' *)']
+const dashes = ['-- ', ' --']
+const percents = ['%% ', ' %%']
 
 export const commentTypes: { [lang: string]: string[] } = {
-    'c': slashes,
-    'coffeescript': hashes,
-    'cpp': slashes,
-    'css': slashes,
-    'dockerfile': hashes,
-    'fsharp': parens,
-    'go': slashes,
-    'groovy': slashes,
-    'haskell': dashes,
-    'ini': semicolons,
-    'jade': slashes,
-    'java': slashes,
-    'javascript': slashes,
-    'javascriptreact': slashes,
-    'latex': percents,
-    'less': slashes,
-    'lua': semicolons,
-    'makefile': hashes,
-    'objective-c': slashes,
-    'ocaml': parens,
-    'perl': hashes,
-    'perl6': hashes,
-    'php': slashes,
-    'plaintext': hashes,
-    'powershell': hashes,
-    'python': hashes,
-    'r': hashes,
-    'ruby': hashes,
-    'rust': slashes,
-    'scss': slashes,
-    'shellscript': hashes,
-    'sql': hashes,
-    'swift': slashes,
-    'typescript': slashes,
-    'typescriptreact': slashes,
-    'xsl': slashes,
-    'yaml': hashes
-};
+  'c': slashes,
+  'coffeescript': hashes,
+  'cpp': slashes,
+  'css': slashes,
+  'dockerfile': hashes,
+  'fsharp': parens,
+  'go': slashes,
+  'groovy': slashes,
+  'haskell': dashes,
+  'ini': semicolons,
+  'jade': slashes,
+  'java': slashes,
+  'javascript': slashes,
+  'javascriptreact': slashes,
+  'latex': percents,
+  'less': slashes,
+  'lua': semicolons,
+  'makefile': hashes,
+  'objective-c': slashes,
+  'ocaml': parens,
+  'perl': hashes,
+  'perl6': hashes,
+  'php': slashes,
+  'plaintext': hashes,
+  'powershell': hashes,
+  'python': hashes,
+  'r': hashes,
+  'ruby': hashes,
+  'rust': slashes,
+  'scss': slashes,
+  'shellscript': hashes,
+  'sql': hashes,
+  'swift': slashes,
+  'typescript': slashes,
+  'typescriptreact': slashes,
+  'xsl': slashes,
+  'yaml': hashes
+}
 
-export const isSupported = (language: string) => language in commentTypes;
+export const isSupported = (language: string) => language in commentTypes
 
-export const getHeader = (fileContent: string) => {
-    const match = fileContent.match(/^(.{111}((\r\n)|(\n))){10}/g);
+export function getHeader(fileContent: string): string {
+  const match = fileContent.match(/^(.{111}((\r\n)|(\n))){10}/g)
 
-    return match ? match[0] : null;
-};
+  return match ? match[0] : null
+}
 
-export const getFieldValue = (header: string, fieldname: string) => {
-    const match = template.match(new RegExp(`^((?:.*\\\n)*.*)(\\\$${fieldname}_*)`));
+export function getFieldValue(header: string, fieldname: string): string {
+  const match = template.match(new RegExp(`^((?:.*\\\n)*.*)(\\\$${fieldname}_*)`))
 
-    return match ? header.substr(match[1].length, match[2].length) : '';
-};
+  return match ? header.substr(match[1].length, match[2].length) : ''
+}
 
 export const getHeaderData = (header: string): HeaderData => ({
-    filename: getFieldValue(header, 'FILENAME'),
-    author: getFieldValue(header, 'AUTHOR'),
-    createdBy: getFieldValue(header, 'CREATEDBY'),
-    createdAt: moment(getFieldValue(header, 'CREATEDAT'), 'YYYY/MM/DD HH:mm:ss'),
-    updatedBy: getFieldValue(header, 'UPDATEDBY'),
-    updatedAt: moment(getFieldValue(header, 'UPDATEDAT'), 'YYYY/MM/DD HH:mm:ss')
-});
+  filename: getFieldValue(header, 'FILENAME'),
+  author: getFieldValue(header, 'AUTHOR'),
+  createdBy: getFieldValue(header, 'CREATEDBY'),
+  createdAt: moment(getFieldValue(header, 'CREATEDAT'), 'YYYY/MM/DD HH:mm:ss'),
+  updatedBy: getFieldValue(header, 'UPDATEDBY'),
+  updatedAt: moment(getFieldValue(header, 'UPDATEDAT'), 'YYYY/MM/DD HH:mm:ss')
+})
 
-export const generateHeaderData = (document: vscode.TextDocument, headerData?: HeaderData) => {
-    const config = vscode.workspace.getConfiguration();
+export function generateHeaderData(document: vscode.TextDocument, headerData?: HeaderData): HeaderData {
+  const config = vscode.workspace.getConfiguration()
 
-    const user = config.get('esgiheader.username') || process.env['USER'] || 'esgi student';
-    const email = config.get('esgiheader.email') || `${user}@myges.fr`;
+  const user: string = config.get('esgiheader.username') || process.env['USER'] || 'esgi student'
+  const email: string = config.get('esgiheader.email') || `${user}@myges.fr`
 
-    return {
-        filename: basename(document.fileName),
-        author: `${user} <${email}>`,
-        updatedBy: headerData ? headerData.createdBy : user,
-        updatedAt: moment(),
-        createdAt: headerData ? headerData.createdAt : moment(),
-        createdBy: user
-    }
-};
+  return {
+    filename: basename(document.fileName),
+    author: `${user} <${email}>`,
+    updatedBy: headerData ? headerData.createdBy : user,
+    updatedAt: moment(),
+    createdAt: headerData ? headerData.createdAt : moment(),
+    createdBy: user,
+  }
+}
 
-export const setFieldValue = (header: string, name: string, value: string) => {
-    const match = template.match(new RegExp(`^((?:.*\\n)*.*)(\\\$${name}_*)`, ''));
+export function setFieldValue(header: string, name: string, value: string): string {
+  const match = template.match(new RegExp(`^((?:.*\\n)*.*)(\\\$${name}_*)`, ''))
 
-    return match ? header.substr(0, match[1].length)
-        .concat(value.concat(' '.repeat(match[2].length)).substr(0, match[2].length))
-        .concat(header.substr(match[1].length + match[2].length)) : "";
-};
+  return match ? header.substr(0, match[1].length)
+    .concat(value.concat(' '.repeat(match[2].length)).substr(0, match[2].length))
+    .concat(header.substr(match[1].length + match[2].length)) : ""
+}
 
-export const getTemplate = (languageId: string) => template.replace(new RegExp(`^(.{${commentTypes[languageId][0].length}})(.*)(.{${commentTypes[languageId][0].length}})$`, 'gm'), commentTypes[languageId][0] + '$2' + commentTypes[languageId][1]);
+export const getTemplate = (languageId: string) => template.replace(new RegExp(`^(.{${commentTypes[languageId][0].length}})(.*)(.{${commentTypes[languageId][0].length}})$`, 'gm'), commentTypes[languageId][0] + '$2' + commentTypes[languageId][1])
 
 export const renderHeader = (language: string, headerdata: HeaderData) => [
-    { name: 'FILENAME', value: headerdata.filename },
-    { name: 'AUTHOR', value: headerdata.author },
-    { name: 'CREATEDAT', value: headerdata.createdAt.format('YYYY/MM/DD HH:mm:ss') },
-    { name: 'CREATEDBY', value: headerdata.createdBy },
-    { name: 'UPDATEDAT', value: headerdata.updatedAt.format('YYYY/MM/DD HH:mm:ss') },
-    { name: 'UPDATEDBY', value: headerdata.updatedBy }
-].reduce((header, field) => setFieldValue(header, field.name, field.value), getTemplate(language));
+  { name: 'FILENAME', value: headerdata.filename },
+  { name: 'AUTHOR', value: headerdata.author },
+  { name: 'CREATEDAT', value: headerdata.createdAt.format('YYYY/MM/DD HH:mm:ss') },
+  { name: 'CREATEDBY', value: headerdata.createdBy },
+  { name: 'UPDATEDAT', value: headerdata.updatedAt.format('YYYY/MM/DD HH:mm:ss') },
+  { name: 'UPDATEDBY', value: headerdata.updatedBy }
+].reduce((header, field) => setFieldValue(header, field.name, field.value), getTemplate(language))
 
-export const activate = (context: vscode.ExtensionContext) => {
-    const disposable = vscode.commands.registerCommand('esgiheader.insert', () => {
-        if (vscode.window.activeTextEditor) {
-            if (isSupported(vscode.window.activeTextEditor.document.languageId)) {
-                vscode.window.activeTextEditor.edit(editor => {
-                    if (vscode.window.activeTextEditor) {
-                        const current = getHeader(vscode.window.activeTextEditor.document.getText());
-                        console.log(vscode.window.activeTextEditor.document.eol);
+export function activate(context: vscode.ExtensionContext) {
+  const disposable = vscode.commands.registerCommand('esgiheader.insert', () => {
+    if (vscode.window.activeTextEditor) {
+      if (isSupported(vscode.window.activeTextEditor.document.languageId)) {
+        vscode.window.activeTextEditor.edit(editor => {
+          if (vscode.window.activeTextEditor) {
+            const current = getHeader(vscode.window.activeTextEditor.document.getText())
+            console.log(vscode.window.activeTextEditor.document.eol)
 
-                        if (current) {
-                            editor.replace(
-                                new vscode.Range(0, 0, 12, 0),
-                                renderHeader(vscode.window.activeTextEditor.document.languageId, generateHeaderData(vscode.window.activeTextEditor.document, getHeaderData(current)))
-                            );
-                        } else {
-                            editor.insert(
-                                new vscode.Position(0, 0),
-                                renderHeader(vscode.window.activeTextEditor.document.languageId, generateHeaderData(vscode.window.activeTextEditor.document))
-                            );
-                        }
-                    }
-                });
+            if (current) {
+              editor.replace(
+                new vscode.Range(0, 0, 12, 0),
+                renderHeader(vscode.window.activeTextEditor.document.languageId, generateHeaderData(vscode.window.activeTextEditor.document, getHeaderData(current)))
+              )
             } else {
-                vscode.window.showInformationMessage(`No header support for language ${vscode.window.activeTextEditor.document.languageId}`);
+              editor.insert(
+                new vscode.Position(0, 0),
+                renderHeader(vscode.window.activeTextEditor.document.languageId, generateHeaderData(vscode.window.activeTextEditor.document))
+              )
             }
-        }
-    });
+          }
+        })
+      } else {
+        vscode.window.showInformationMessage(`No header support for language ${vscode.window.activeTextEditor.document.languageId}`)
+      }
+    }
+  })
 
-    context.subscriptions.push(disposable);
-};
+  context.subscriptions.push(disposable)
+}
