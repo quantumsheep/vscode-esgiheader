@@ -2,7 +2,7 @@
   "name": "esgiheader",
   "displayName": "ESGI Header",
   "description": "ESGI header for VSCode : www.esgi.fr",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "QuantumSheep",
   "icon": "esgi.png",
   "repository": {
@@ -14,7 +14,7 @@
   },
   "homepage": "https://github.com/QuantumSheep/vscode-esgiheader",
   "engines": {
-    "vscode": "^1.23.0"
+    "vscode": "^1.43.0"
   },
   "categories": [
     "Other"
